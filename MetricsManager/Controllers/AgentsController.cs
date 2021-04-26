@@ -28,5 +28,11 @@ namespace MetricsManager.Controllers
         {
             return Ok();
         }
+
+        [HttpGet("getregistmetrics")]
+        public IEnumerable<AgentInfo> GetRegistMetrics()
+        {
+            return null;
+        }
     }
 }
