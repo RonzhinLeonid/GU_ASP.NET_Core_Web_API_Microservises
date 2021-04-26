@@ -19,11 +19,12 @@ namespace GU_ASP.NET_Core_Web_API_Microservises.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult CreateTemperature([FromQuery] DateTime date, [FromQuery] int temperature)
+        public IActionResult CreateTemperature([FromQuery] DateTime? date, [FromQuery] int temperature)
         {
             try
             {
-                _holder.AddTemperature(date, temperature);
+                if (date == null) return StatusCode(400);
+                _holder.AddTemperature((DateTime)date, temperature);
             }
             catch (ArgumentException)
             {
@@ -37,11 +38,12 @@ namespace GU_ASP.NET_Core_Web_API_Microservises.Controllers
         }
 
         [HttpPut("update")]
-        public IActionResult UpdateTemperature([FromQuery] DateTime date, [FromQuery] int temperature)
+        public IActionResult UpdateTemperature([FromQuery] DateTime? date, [FromQuery] int? temperature)
         {
             try
             {
-                _holder.UpdateTemperature(date, temperature);
+                if (date == null || temperature == null) return StatusCode(400);
+                _holder.UpdateTemperature((DateTime)date, (int)temperature);
             }
             catch (ArgumentException)
             {
@@ -55,11 +57,12 @@ namespace GU_ASP.NET_Core_Web_API_Microservises.Controllers
         }
 
         [HttpDelete("delete")]
-        public IActionResult DeleteRangeTemperature([FromQuery] DateTime beginTime, [FromQuery] DateTime endTime)
+        public IActionResult DeleteRangeTemperature([FromQuery] DateTime? beginTime, [FromQuery] DateTime? endTime)
         {
             try
             {
-                _holder.deleteRangeTemperature(beginTime, endTime);
+                if (beginTime == null || endTime == null) return StatusCode(400);
+                _holder.deleteRangeTemperature((DateTime)beginTime, (DateTime)endTime);
             }
             catch (ArgumentException)
             {
