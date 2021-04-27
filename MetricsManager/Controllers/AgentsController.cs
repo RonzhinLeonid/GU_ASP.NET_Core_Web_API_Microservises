@@ -30,7 +30,7 @@ namespace MetricsManager.Controllers
         }
 
         [HttpGet("getregistmetrics")]
-        public IEnumerable<AgentInfo> GetRegistMetrics()
+        public IEnumerable<AgentInfo> GetRegisterMetrics()
         {
             return null;
         }

@@ -10,5 +10,6 @@ namespace MetricsManager
         public int AgentId { get; }
         public Uri AgentAddress { get; }
 
+
     }
 }
