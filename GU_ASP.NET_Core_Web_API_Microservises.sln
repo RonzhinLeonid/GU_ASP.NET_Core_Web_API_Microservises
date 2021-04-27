@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GU_ASP.NET_Core_Web_API_Microservises", "GU_ASP.NET_Core_Web_API_Microservises\GU_ASP.NET_Core_Web_API_Microservises.csproj", "{E0228B8D-D74B-4CDF-82E5-10D07F40D2A6}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsManager", "MetricsManager\MetricsManager.csproj", "{AA71F0A4-9A08-45B2-8334-2C96C8681212}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsAgent", "MetricsAgent\MetricsAgent.csproj", "{9E38EBF9-35AB-492B-A07C-C8360DE82AC1}"
@@ -19,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E0228B8D-D74B-4CDF-82E5-10D07F40D2A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E0228B8D-D74B-4CDF-82E5-10D07F40D2A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E0228B8D-D74B-4CDF-82E5-10D07F40D2A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E0228B8D-D74B-4CDF-82E5-10D07F40D2A6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AA71F0A4-9A08-45B2-8334-2C96C8681212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AA71F0A4-9A08-45B2-8334-2C96C8681212}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA71F0A4-9A08-45B2-8334-2C96C8681212}.Release|Any CPU.ActiveCfg = Release|Any CPU
