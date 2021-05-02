@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using System.Linq;
-using System.Threading.Tasks;
+using MetricsAgent.Responses;
+using MetricsAgent.DAL;
 
 namespace MetricsAgent.Controllers
 {
@@ -11,10 +12,30 @@ namespace MetricsAgent.Controllers
     [ApiController]
     public class DotNetMetricsController : ControllerBase
     {
-        [HttpGet("errors-count/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetErrorsCount([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        private readonly IDotNetMetricsRepository _repository;
+        private readonly ILogger<DotNetMetricsController> _logger;
+        public DotNetMetricsController(IDotNetMetricsRepository repository, ILogger<DotNetMetricsController> logger)
         {
-            return Ok();
+            _repository = repository;
+            _logger = logger;
+            _logger.LogDebug(1, "NLog встроен в DotNetMetricsController");
+        }
+
+        [HttpGet("errors-count/from/{fromTime}/to/{toTime}")]
+        public IActionResult GetErrorsCount([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
+        {
+            _logger.LogInformation("Получение ошибок за период: {fromTime}, {toTime}",
+                fromTime.ToString("yyyy-MM-dd"),
+                toTime.ToString("yyyy-MM-dd"));
+
+            var result = _repository.GetByTimePeriod(fromTime, toTime);
+            if (result is null)
+            {
+                _logger.LogInformation("По запросу ничего не было найдено.");
+                return NotFound();
+            }
+            _logger.LogInformation("Запрос выполнен успшно.");
+            return Ok(new DotNetMetricsByTimePeriodResponse() { Metrics = result.Select(val => val.Value).ToList() });
         }
     }
 }

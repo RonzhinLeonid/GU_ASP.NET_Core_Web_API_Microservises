@@ -3,16 +3,19 @@ using MetricsManager.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Xunit;
+using Moq;
+using Microsoft.Extensions.Logging;
 
 namespace MetricsManagerTests
 {
     public class CpuControllerUnitTests
     {
         private CpuMetricsController controller;
-
+        private Mock<ILogger<CpuMetricsController>> mockLogger;
         public CpuControllerUnitTests()
         {
-            controller = new CpuMetricsController();
+            mockLogger = new Mock<ILogger<CpuMetricsController>>();
+            controller = new CpuMetricsController(mockLogger.Object);
         }
 
         [Fact]
@@ -28,37 +31,12 @@ namespace MetricsManagerTests
         }
 
         [Fact]
-        public void GetMetricsByPercentileFromAgent_ReturnsOk()
-        {
-            var agentId = 1;
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
-            var percentile = Percentile.P99;
-
-            var result = controller.GetMetricsByPercentileFromAgent(agentId, fromTime, toTime, percentile);
-
-            _ = Assert.IsAssignableFrom<IActionResult>(result);
-        }
-
-        [Fact]
         public void GetMetricsFromAllCluster_ReturnsOk()
         {
             var fromTime = TimeSpan.FromSeconds(0);
             var toTime = TimeSpan.FromSeconds(100);
 
             var result = controller.GetMetricsFromAllCluster(fromTime, toTime);
-
-            _ = Assert.IsAssignableFrom<IActionResult>(result);
-        }
-
-        [Fact]
-        public void GetMetricsByPercentileFromAllCluster_ReturnsOk()
-        {
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
-            var percentile = Percentile.P99;
-
-            var result = controller.GetMetricsByPercentileFromAllCluster(fromTime, toTime, percentile);
 
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }

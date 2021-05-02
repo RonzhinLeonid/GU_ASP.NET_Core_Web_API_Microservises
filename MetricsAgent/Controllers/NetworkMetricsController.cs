@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using System.Linq;
-using System.Threading.Tasks;
+using MetricsAgent.Responses;
+using MetricsAgent.DAL;
 
 namespace MetricsAgent.Controllers
 {
@@ -11,10 +12,30 @@ namespace MetricsAgent.Controllers
     [ApiController]
     public class NetworkMetricsController : ControllerBase
     {
-        [HttpGet("from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetrics([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        private readonly INetworkMetricsRepository _repository;
+        private readonly ILogger<NetworkMetricsController> _logger;
+        public NetworkMetricsController(INetworkMetricsRepository repository, ILogger<NetworkMetricsController> logger)
         {
-            return Ok();
+            _repository = repository;
+            _logger = logger;
+            _logger.LogDebug(1, "NLog встроен в NetworkMetricsController");
+        }
+
+        [HttpGet("from/{fromTime}/to/{toTime}")]
+        public IActionResult GetMetrics([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
+        {
+            _logger.LogInformation("Получение метрик за период: {fromTime}, {toTime}",
+                fromTime.ToString("yyyy-MM-dd"),
+                toTime.ToString("yyyy-MM-dd"));
+
+            var result = _repository.GetByTimePeriod(fromTime, toTime);
+            if (result is null)
+            {
+                _logger.LogInformation("По запросу ничего не было найдено.");
+                return NotFound();
+            }
+            _logger.LogInformation("Запрос выполнен успшно.");
+            return Ok(new NetworkMetricsByTimePeriodResponse() { Metrics = result.Select(val => val.Value).ToList() });
         }
     }
 }

@@ -3,16 +3,20 @@ using MetricsManager.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Xunit;
+using Moq;
+using Microsoft.Extensions.Logging;
 
 namespace MetricsManagerTests
 {
     public class AgentsControllerUnitTests
     {
         private AgentsController controller;
+        private Mock<ILogger<AgentsController>> mockLogger;
 
         public AgentsControllerUnitTests()
         {
-            controller = new AgentsController();
+            mockLogger = new Mock<ILogger<AgentsController>>();
+            controller = new AgentsController(mockLogger.Object);
         }
 
         [Fact]
@@ -48,7 +52,7 @@ namespace MetricsManagerTests
         [Fact]
         public void GetRegisterMetrics_ReturnsOk()
         {
-             var result = controller.GetRegisterMetrics();
+             var result = controller.GetRegisterAgents();
 
             Assert.Null(result);
         }
