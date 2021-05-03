@@ -9,7 +9,7 @@ namespace MetricsAgent.DAL
 {
     public class CpuMetricsRepository : ICpuMetricsRepository
     {
-        private const string ConnectionString = "Data Source=metrics.db;Version=3;Pooling=true;Max Pool Size=100;";
+        private const string ConnectionString = SQLConnectionString.ConnectionString;
         private readonly ILogger<CpuMetricsRepository> _logger;
         // инжектируем соединение с базой данных в наш репозиторий через конструктор
         public CpuMetricsRepository(ILogger<CpuMetricsRepository> logger)

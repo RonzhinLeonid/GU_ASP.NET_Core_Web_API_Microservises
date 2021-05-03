@@ -9,7 +9,7 @@ namespace MetricsAgent.DAL
 {
     public class HddMetricsRepository : IHddMetricsRepository
     {
-        private const string ConnectionString = "Data Source=metrics.db;Version=3;Pooling=true;Max Pool Size=100;";
+        private const string ConnectionString = SQLConnectionString.ConnectionString;
         private readonly ILogger<HddMetricsRepository> _logger;
         public HddMetricsRepository(ILogger<HddMetricsRepository> logger)
         {
