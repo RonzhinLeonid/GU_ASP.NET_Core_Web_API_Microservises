@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using Microsoft.Extensions.Logging;
+using Dapper;
 
 namespace MetricsAgent.DAL
 {
@@ -27,28 +28,12 @@ namespace MetricsAgent.DAL
             var toSeconds = to.ToUnixTimeSeconds();
             if (fromSeconds > toSeconds) return null;
 
-            using var connection = new SQLiteConnection(ConnectionString);
-            using var cmd = new SQLiteCommand(connection);
-            cmd.CommandText = "SELECT * FROM rammetrics WHERE (time >= @from) and (time <= @to)";
-            cmd.Parameters.AddWithValue("@from", fromSeconds);
-            cmd.Parameters.AddWithValue("@to", toSeconds);
-            cmd.Prepare();
-
-            connection.Open();
-            var temp = new List<RamMetrics>();
-            using var reader = cmd.ExecuteReader();
-
-            while (reader.Read())
+            using (var connection = new SQLiteConnection(ConnectionString))
             {
-                temp.Add(new RamMetrics()
-                {
-                    Id = reader.GetInt32(0),
-                    Value = reader.GetInt32(1),
-                    Time = reader.GetInt32(2)
-                });
+                var commandParameters = new { from = fromSeconds, to = toSeconds };
+                return connection.Query<RamMetrics>("SELECT * FROM rammetrics WHERE (time >= @from) and (time <= @to)",
+                                                    commandParameters).ToList();
             }
-            connection.Close();
-            return temp.Count > 0 ? temp : null;
         }
     }
 }
