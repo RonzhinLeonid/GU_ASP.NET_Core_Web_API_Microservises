@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using MetricsAgent.Responses;
 using MetricsAgent.DAL;
+using AutoMapper;
 
 namespace MetricsAgent.Controllers
 {
@@ -35,6 +36,7 @@ namespace MetricsAgent.Controllers
                 return NotFound();
             }
             _logger.LogInformation("Запрос выполнен успшно.");
+
             return Ok(new CpuMetricsByTimePeriodResponse() { Metrics = result.Select(val => val.Value).ToList() });
         }
     }
