@@ -4,8 +4,8 @@ using System;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using MetricsAgent.Responses;
-using MetricsAgent.DAL;
 using AutoMapper;
+using MetricsAgent.DAL;
 
 namespace MetricsAgent.Controllers
 {
@@ -15,9 +15,11 @@ namespace MetricsAgent.Controllers
     {
         private readonly ICpuMetricsRepository _repository;
         private readonly ILogger<CpuMetricsController> _logger;
-        public CpuMetricsController(ICpuMetricsRepository repository, ILogger<CpuMetricsController> logger)
+        private IMapper _mapper;
+        public CpuMetricsController(ICpuMetricsRepository repository, ILogger<CpuMetricsController> logger, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
             _logger = logger;
             _logger.LogDebug(1, "NLog встроен в CpuMetricsController");
         }
@@ -35,9 +37,9 @@ namespace MetricsAgent.Controllers
                 _logger.LogInformation("По запросу ничего не было найдено.");
                 return NotFound();
             }
-            _logger.LogInformation("Запрос выполнен успшно.");
 
-            return Ok(new CpuMetricsByTimePeriodResponse() { Metrics = result.Select(val => val.Value).ToList() });
+            _logger.LogInformation("Запрос выполнен успшно.");
+            return Ok(new CpuMetricsByTimePeriodResponse() { Metrics = result.Select(_mapper.Map<CpuMetricsResponse>).ToList() });
         }
     }
 }

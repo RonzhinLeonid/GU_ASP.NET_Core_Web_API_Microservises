@@ -6,6 +6,7 @@ using Xunit;
 using Moq;
 using Microsoft.Extensions.Logging;
 using MetricsAgent.DAL;
+using AutoMapper;
 
 namespace MetricsAgentTests
 {
@@ -13,14 +14,15 @@ namespace MetricsAgentTests
     {
         private HddMetricsController controller;
         private Mock<IHddMetricsRepository> mock;
-        private Mock<ILogger<HddMetricsController>> mockLogger;
+        private Mock<ILogger<HddMetricsController>> mockLogger; 
+        private IMapper mapper;
+
         public HddMetricsControllerUnitTests()
         {
             mock = new Mock<IHddMetricsRepository>();
             mockLogger = new Mock<ILogger<HddMetricsController>>();
-            controller = new HddMetricsController(mock.Object, mockLogger.Object);
+            controller = new HddMetricsController(mock.Object, mockLogger.Object, mapper);
         }
-
 
         [Fact]
         public void GetFreeHDDSpace_ReturnsOk()

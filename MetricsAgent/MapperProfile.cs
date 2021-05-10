@@ -12,11 +12,18 @@ namespace MetricsAgent
     {
         public MapperProfile()
         {
-            CreateMap<CpuMetric, CpuMetricsResponse>();
-            CreateMap<DotNetMetrics, DotNetMetricsByTimePeriodResponse>();
-            CreateMap<HddMetrics, HddMetricsByTimePeriodResponse>();
-            CreateMap<NetworkMetrics, NetworkMetricsByTimePeriodResponse>();
-            CreateMap<RamMetrics, RamMetricsByTimePeriodResponse>();
+            var valueConverter = new DateTimeOffsetСonverter();
+
+            CreateMap<CpuMetric, CpuMetricsResponse>()
+            .ForMember(r => r.Time, exp => exp.ConvertUsing(valueConverter, val => val.Time));
+            CreateMap<DotNetMetrics, DotNetMetricsResponse>()
+            .ForMember(r => r.Time, exp => exp.ConvertUsing(valueConverter, val => val.Time));
+            CreateMap<HddMetrics, HddMetricsResponse>()
+            .ForMember(r => r.Time, exp => exp.ConvertUsing(valueConverter, val => val.Time));
+            CreateMap<NetworkMetrics, NetworkMetricsResponse>()
+            .ForMember(r => r.Time, exp => exp.ConvertUsing(valueConverter, val => val.Time));
+            CreateMap<RamMetrics, RamMetricsResponse>()
+            .ForMember(r => r.Time, exp => exp.ConvertUsing(valueConverter, val => val.Time));
         }
     }
 }

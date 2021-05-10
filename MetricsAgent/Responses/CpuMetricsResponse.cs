@@ -7,14 +7,7 @@ namespace MetricsAgent.Responses
 {
     public class CpuMetricsResponse
     {
-        long _time;
-        public DateTimeOffset Time
-        {
-            get
-            {
-                return new DateTimeOffset(_time, new TimeSpan(0, 0, 0));
-            }
-        }
+        public DateTimeOffset Time { get; set; }
         public int Value { get; set; }
     }
 }

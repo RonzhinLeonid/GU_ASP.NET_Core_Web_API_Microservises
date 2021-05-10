@@ -6,6 +6,7 @@ using Xunit;
 using Moq;
 using Microsoft.Extensions.Logging;
 using MetricsAgent.DAL;
+using AutoMapper;
 
 namespace MetricsAgentTests
 {
@@ -14,11 +15,13 @@ namespace MetricsAgentTests
         private DotNetMetricsController controller;
         private Mock<IDotNetMetricsRepository> mock;
         private Mock<ILogger<DotNetMetricsController>> mockLogger;
+        private IMapper mapper;
+
         public DotNetMetricsControllerUnitTests()
         {
             mock = new Mock<IDotNetMetricsRepository>();
             mockLogger = new Mock<ILogger<DotNetMetricsController>>();
-            controller = new DotNetMetricsController(mock.Object, mockLogger.Object);
+            controller = new DotNetMetricsController(mock.Object, mockLogger.Object, mapper);
         }
 
         [Fact]
