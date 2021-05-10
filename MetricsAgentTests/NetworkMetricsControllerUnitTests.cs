@@ -3,27 +3,47 @@ using MetricsAgent.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Xunit;
+using Moq;
+using Microsoft.Extensions.Logging;
+using MetricsAgent.DAL;
 
 namespace MetricsAgentTests
 {
     public class NetworkMetricsControllerUnitTests
     {
         private NetworkMetricsController controller;
+        private Mock<INetworkMetricsRepository> mock;
+        private Mock<ILogger<NetworkMetricsController>> mockLogger;
 
         public NetworkMetricsControllerUnitTests()
         {
-            controller = new NetworkMetricsController();
+            mock = new Mock<INetworkMetricsRepository>();
+            mockLogger = new Mock<ILogger<NetworkMetricsController>>();
+            controller = new NetworkMetricsController(mock.Object, mockLogger.Object);
         }
 
         [Fact]
         public void GetMetrics_ReturnsOk()
         {
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
+            var fromTime = new DateTimeOffset(new DateTime(2021, 5, 11));
+            var toTime = new DateTimeOffset(new DateTime(2021, 5, 20));
 
             var result = controller.GetMetrics(fromTime, toTime);
 
             _ = Assert.IsAssignableFrom<IActionResult>(result);
+        }
+
+        [Fact]
+        public void GetByTimePeriod_VerifyRequestToRepository()
+        {
+            mock.Setup(r => r.GetByTimePeriod(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>())).Verifiable();
+
+            var fromTime = new DateTimeOffset(new DateTime(2021, 5, 11));
+            var toTime = new DateTimeOffset(new DateTime(2021, 5, 20));
+
+            var result = controller.GetMetrics(fromTime, toTime);
+
+            mock.Verify(r => r.GetByTimePeriod(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()), Times.AtMostOnce());
         }
     }
 }

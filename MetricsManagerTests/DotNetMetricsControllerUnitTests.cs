@@ -2,16 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Xunit;
+using Moq;
+using Microsoft.Extensions.Logging;
 
 namespace MetricsManagerTests
 {
     public class DotNetMetricsControllerUnitTests
     {
         private DotNetMetricsController controller;
+        private Mock<ILogger<DotNetMetricsController>> mockLogger;
 
         public DotNetMetricsControllerUnitTests()
         {
-            controller = new DotNetMetricsController();
+            mockLogger = new Mock<ILogger<DotNetMetricsController>>();
+            controller = new DotNetMetricsController(mockLogger.Object);
         }
 
         [Fact]

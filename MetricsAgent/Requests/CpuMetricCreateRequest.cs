@@ -5,12 +5,9 @@ using System.Threading.Tasks;
 
 namespace MetricsAgent
 {
-    public enum Percentile
+    public class CpuMetricCreateRequest
     {
-        Median = 0,
-        P75 = 1,
-        P90 = 2,
-        P95 = 3,
-        P99 = 4
+        public TimeSpan Time { get; set; }
+        public int Value { get; set; }
     }
 }

@@ -3,24 +3,47 @@ using MetricsAgent.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Xunit;
+using Moq;
+using Microsoft.Extensions.Logging;
+using MetricsAgent.DAL;
 
 namespace MetricsAgentTests
 {
     public class HddMetricsControllerUnitTests
     {
         private HddMetricsController controller;
-
+        private Mock<IHddMetricsRepository> mock;
+        private Mock<ILogger<HddMetricsController>> mockLogger;
         public HddMetricsControllerUnitTests()
         {
-            controller = new HddMetricsController();
+            mock = new Mock<IHddMetricsRepository>();
+            mockLogger = new Mock<ILogger<HddMetricsController>>();
+            controller = new HddMetricsController(mock.Object, mockLogger.Object);
         }
+
 
         [Fact]
         public void GetFreeHDDSpace_ReturnsOk()
         {
-            var result = controller.GetFreeHDDSpace();
+            var fromTime = new DateTimeOffset(new DateTime(2021, 5, 11));
+            var toTime = new DateTimeOffset(new DateTime(2021, 5, 20));
+
+            var result = controller.GetFreeHDDSpace(fromTime, toTime);
 
             _ = Assert.IsAssignableFrom<IActionResult>(result);
+        }
+
+        [Fact]
+        public void GetByTimePeriod_VerifyRequestToRepository()
+        {
+            mock.Setup(r => r.GetByTimePeriod(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>())).Verifiable();
+
+            var fromTime = new DateTimeOffset(new DateTime(2021, 5, 11));
+            var toTime = new DateTimeOffset(new DateTime(2021, 5, 20));
+
+            var result = controller.GetFreeHDDSpace(fromTime, toTime);
+
+            mock.Verify(r => r.GetByTimePeriod(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()), Times.AtMostOnce());
         }
     }
 }

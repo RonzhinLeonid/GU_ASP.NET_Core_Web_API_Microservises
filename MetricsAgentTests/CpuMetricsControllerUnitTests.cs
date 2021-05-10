@@ -1,41 +1,50 @@
 using MetricsAgent;
 using MetricsAgent.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using System;
 using Xunit;
+using Microsoft.Extensions.Logging;
+using MetricsAgent.DAL;
+using System.Collections.Generic;
 
 namespace MetricsAgentTests
 {
     public class CpuMetricsControllerUnitTests
     {
         private CpuMetricsController controller;
-
+        private Mock<ICpuMetricsRepository> mock;
+        private Mock<ILogger<CpuMetricsController>> mockLogger;
+        
         public CpuMetricsControllerUnitTests()
         {
-            controller = new CpuMetricsController();
+            mock = new Mock<ICpuMetricsRepository>();
+            mockLogger = new Mock<ILogger<CpuMetricsController>>();
+            controller = new CpuMetricsController(mock.Object, mockLogger.Object);
         }
 
         [Fact]
-        public void GetMetricsPercentile_ReturnsOk()
+        public void GetByTimePeriod_ReturnsOk()
         {
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
-            var percentile = Percentile.P99;
+            var fromTime = new DateTimeOffset(new DateTime(2021, 5, 11));
+            var toTime = new DateTimeOffset(new DateTime(2021, 5, 20));
 
-            var result = controller.GetMetrics(fromTime, toTime, percentile);
+            var result = controller.GetByTimePeriod(fromTime, toTime);
 
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }
 
         [Fact]
-        public void GetMetrics_ReturnsOk()
+        public void GetByTimePeriod_VerifyRequestToRepository()
         {
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
+            mock.Setup(r => r.GetByTimePeriod(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>())).Verifiable();
 
-            var result = controller.GetMetrics(fromTime, toTime);
+            var fromTime = new DateTimeOffset(new DateTime(2021, 5, 11));
+            var toTime = new DateTimeOffset(new DateTime(2021, 5, 20));
 
-            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            var result = controller.GetByTimePeriod(fromTime, toTime);
+
+            mock.Verify(r => r.GetByTimePeriod(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()), Times.AtMostOnce());
         }
     }
 }
