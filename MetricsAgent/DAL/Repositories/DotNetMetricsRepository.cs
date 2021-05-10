@@ -10,9 +10,7 @@ namespace MetricsAgent.DAL
 {
     public class DotNetMetricsRepository : IDotNetMetricsRepository
     {
-        private const string ConnectionString = SQLConnectionString.ConnectionString;
         private readonly ILogger<DotNetMetricsRepository> _logger;
-
         public DotNetMetricsRepository(ILogger<DotNetMetricsRepository> logger)
         {
             _logger = logger;
@@ -29,7 +27,7 @@ namespace MetricsAgent.DAL
             var toSeconds = to.ToUnixTimeSeconds();
             if (fromSeconds > toSeconds) return null;
 
-            using (var connection = new SQLiteConnection(ConnectionString))
+            using (var connection = new SQLiteConnection(SQLConnectionString.ConnectionString))
             {
                 var commandParameters = new { from = fromSeconds, to = toSeconds };
                 return connection.Query<DotNetMetrics>("SELECT * FROM dotnetmetrics WHERE (time >= @from) and (time <= @to)",

@@ -10,9 +10,7 @@ namespace MetricsAgent.DAL
 {
     public class CpuMetricsRepository : ICpuMetricsRepository
     {
-        private const string ConnectionString = SQLConnectionString.ConnectionString;
         private readonly ILogger<CpuMetricsRepository> _logger;
-        // инжектируем соединение с базой данных в наш репозиторий через конструктор
         public CpuMetricsRepository(ILogger<CpuMetricsRepository> logger)
         {
             _logger = logger;
@@ -27,10 +25,9 @@ namespace MetricsAgent.DAL
         {
             var fromSeconds = from.ToUnixTimeSeconds();
             var toSeconds = to.ToUnixTimeSeconds();
-
             if (fromSeconds > toSeconds) return null;
 
-            using (var connection = new SQLiteConnection(ConnectionString))
+            using (var connection = new SQLiteConnection(SQLConnectionString.ConnectionString))
             {
                 var commandParameters =  new { from = fromSeconds, to = toSeconds };
                 return connection.Query<CpuMetric>("SELECT * FROM cpumetrics WHERE (time >= @from) and (time <= @to)",

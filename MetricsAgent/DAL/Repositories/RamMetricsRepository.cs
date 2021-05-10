@@ -10,7 +10,6 @@ namespace MetricsAgent.DAL
 {
     public class RamMetricsRepository : IRamMetricsRepository
     {
-        private const string ConnectionString = SQLConnectionString.ConnectionString;
         private readonly ILogger<RamMetricsRepository> _logger;
         public RamMetricsRepository(ILogger<RamMetricsRepository> logger)
         {
@@ -28,7 +27,7 @@ namespace MetricsAgent.DAL
             var toSeconds = to.ToUnixTimeSeconds();
             if (fromSeconds > toSeconds) return null;
 
-            using (var connection = new SQLiteConnection(ConnectionString))
+            using (var connection = new SQLiteConnection(SQLConnectionString.ConnectionString))
             {
                 var commandParameters = new { from = fromSeconds, to = toSeconds };
                 return connection.Query<RamMetrics>("SELECT * FROM rammetrics WHERE (time >= @from) and (time <= @to)",

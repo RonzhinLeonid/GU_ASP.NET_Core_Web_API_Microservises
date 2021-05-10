@@ -10,7 +10,6 @@ namespace MetricsAgent.DAL
 {
     public class NetworkMetricsRepository : INetworkMetricsRepository
     {
-        private const string ConnectionString = SQLConnectionString.ConnectionString;
         private readonly ILogger<NetworkMetricsRepository> _logger;
         public NetworkMetricsRepository(ILogger<NetworkMetricsRepository> logger)
         {
@@ -28,7 +27,7 @@ namespace MetricsAgent.DAL
             var toSeconds = to.ToUnixTimeSeconds();
             if (fromSeconds > toSeconds) return null;
 
-            using (var connection = new SQLiteConnection(ConnectionString))
+            using (var connection = new SQLiteConnection(SQLConnectionString.ConnectionString))
             {
                 var commandParameters = new { from = fromSeconds, to = toSeconds };
                 return connection.Query<NetworkMetrics>("SELECT * FROM networkmetrics WHERE (time >= @from) and (time <= @to)",
