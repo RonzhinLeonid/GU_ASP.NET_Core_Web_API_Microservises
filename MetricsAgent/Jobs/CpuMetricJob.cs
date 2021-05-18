@@ -1,29 +1,25 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MetricsAgent.DAL;
 using Quartz;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace MetricsAgent.Jobs
 {
     public class CpuMetricJob : IJob
     {
         private ICpuMetricsRepository _repository;
-        private readonly PerformanceCounter _cpuCounter;
+        private readonly PerformanceCounter _counter;
         public CpuMetricJob(ICpuMetricsRepository repository)
         {
             _repository = repository;
-            _cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            _counter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         }
-
 
         public Task Execute(IJobExecutionContext context)
         {
             // получаем значение занятости CPU
-            var cpuUsageInPercents = Convert.ToInt32(_cpuCounter.NextValue());
+            var cpuUsageInPercents = Convert.ToInt32(_counter.NextValue());
 
             // узнаем когда мы сняли значение метрики.
             var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
