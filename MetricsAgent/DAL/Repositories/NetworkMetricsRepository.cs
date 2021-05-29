@@ -18,7 +18,18 @@ namespace MetricsAgent.DAL
 
         public void Create(NetworkMetrics item)
         {
-            throw new NotImplementedException();
+            using (var connection = new SQLiteConnection(SQLConnectionString.ConnectionString))
+            {
+                var result = connection.Execute(
+                $"INSERT INTO networkmetrics(Time,Value) VALUES (@Time,@Value);",
+                    new
+                    {
+                        Time = item.Time,
+                        Value = item.Value,
+                    }
+                );
+                if (result <= 0) throw new InvalidOperationException("Не удалось добавить метрику.");
+            }
         }
 
         public IList<NetworkMetrics> GetByTimePeriod(DateTimeOffset from, DateTimeOffset to)
