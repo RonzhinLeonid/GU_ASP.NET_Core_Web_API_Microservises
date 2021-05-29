@@ -36,7 +36,7 @@ namespace MetricsAgent.DAL
         {
             var fromSeconds = from.ToUnixTimeSeconds();
             var toSeconds = to.ToUnixTimeSeconds();
-            if (fromSeconds > toSeconds) return null;
+            if (fromSeconds > toSeconds) return new List<RamMetrics>();
 
             using (var connection = new SQLiteConnection(SQLConnectionString.ConnectionString))
             {

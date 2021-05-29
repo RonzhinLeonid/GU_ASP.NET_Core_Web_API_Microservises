@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Microsoft.Extensions.Logging;
+using System.Linq;
+using AutoMapper;
+using MetricsManager.DAL.Interfaces;
+using MetricsManager.Responses;
 
 namespace MetricsManager.Controllers
 {
@@ -9,12 +13,16 @@ namespace MetricsManager.Controllers
     [ApiController]
     public class CpuMetricsController : ControllerBase
     {
+        private readonly ICpuMetricsRepository _repository;
         private readonly ILogger<CpuMetricsController> _logger;
+        private readonly IMapper _mapper;
 
-        public CpuMetricsController( ILogger<CpuMetricsController> logger)
+        public CpuMetricsController(ICpuMetricsRepository repository, ILogger<CpuMetricsController> logger, IMapper mapper)
         {
+            _repository = repository;
             _logger = logger;
             _logger.LogDebug(1, "NLog встроен в CpuMetricsController");
+            _mapper = mapper;
         }
 
         [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
@@ -24,7 +32,12 @@ namespace MetricsManager.Controllers
                 agentId,
                 fromTime.ToString(),
                 toTime.ToString());
-            return Ok();
+            var result = _repository.GetByTimePeriod(fromTime, toTime, agentId);
+
+            return Ok(new CpuGetMetricsFromAgentResponse()
+            {
+                Metrics = result.Select(_mapper.Map<CpuMetricResponse>)
+            });
         }
 
         [HttpGet("cluster/from/{fromTime}/to/{toTime}")]
@@ -33,7 +46,12 @@ namespace MetricsManager.Controllers
             _logger.LogInformation("Получение показателей ЦП за период: {fromTime}, {toTime}",
                 fromTime.ToString(),
                 toTime.ToString());
-            return Ok();
+            var result = _repository.GetByTimePeriod(fromTime, toTime);
+
+            return Ok(new CpuGetMetricsFromAllClusterResponse()
+            {
+                Metrics = result.Select(_mapper.Map<CpuMetricResponse>)
+            });
         }
     }
 }
