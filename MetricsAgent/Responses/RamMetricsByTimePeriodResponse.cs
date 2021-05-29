@@ -7,6 +7,6 @@ namespace MetricsAgent.Responses
 {
     public class RamMetricsByTimePeriodResponse
     {
-        public List<int> Metrics { get; set; }
+        public List<RamMetricsResponse> Metrics { get; set; }
     }
 }

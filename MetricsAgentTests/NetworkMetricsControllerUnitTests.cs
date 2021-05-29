@@ -6,6 +6,7 @@ using Xunit;
 using Moq;
 using Microsoft.Extensions.Logging;
 using MetricsAgent.DAL;
+using AutoMapper;
 
 namespace MetricsAgentTests
 {
@@ -14,12 +15,13 @@ namespace MetricsAgentTests
         private NetworkMetricsController controller;
         private Mock<INetworkMetricsRepository> mock;
         private Mock<ILogger<NetworkMetricsController>> mockLogger;
+        private IMapper mapper;
 
         public NetworkMetricsControllerUnitTests()
         {
             mock = new Mock<INetworkMetricsRepository>();
             mockLogger = new Mock<ILogger<NetworkMetricsController>>();
-            controller = new NetworkMetricsController(mock.Object, mockLogger.Object);
+            controller = new NetworkMetricsController(mock.Object, mockLogger.Object, mapper);
         }
 
         [Fact]

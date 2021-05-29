@@ -4,6 +4,7 @@ using System;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using MetricsAgent.Responses;
+using AutoMapper;
 using MetricsAgent.DAL;
 
 namespace MetricsAgent.Controllers
@@ -14,9 +15,11 @@ namespace MetricsAgent.Controllers
     {
         private readonly IDotNetMetricsRepository _repository;
         private readonly ILogger<DotNetMetricsController> _logger;
-        public DotNetMetricsController(IDotNetMetricsRepository repository, ILogger<DotNetMetricsController> logger)
+        private IMapper _mapper;
+        public DotNetMetricsController(IDotNetMetricsRepository repository, ILogger<DotNetMetricsController> logger, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
             _logger = logger;
             _logger.LogDebug(1, "NLog встроен в DotNetMetricsController");
         }
@@ -35,7 +38,7 @@ namespace MetricsAgent.Controllers
                 return NotFound();
             }
             _logger.LogInformation("Запрос выполнен успшно.");
-            return Ok(new DotNetMetricsByTimePeriodResponse() { Metrics = result.Select(val => val.Value).ToList() });
+            return Ok(new DotNetMetricsByTimePeriodResponse() { Metrics = result.Select(_mapper.Map<DotNetMetricsResponse>).ToList() });
         }
     }
 }

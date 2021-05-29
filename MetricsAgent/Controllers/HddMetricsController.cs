@@ -4,6 +4,7 @@ using System;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using MetricsAgent.Responses;
+using AutoMapper;
 using MetricsAgent.DAL;
 
 namespace MetricsAgent.Controllers
@@ -14,9 +15,11 @@ namespace MetricsAgent.Controllers
     {
         private readonly IHddMetricsRepository _repository;
         private readonly ILogger<HddMetricsController> _logger;
-        public HddMetricsController(IHddMetricsRepository repository, ILogger<HddMetricsController> logger)
+        private IMapper _mapper;
+        public HddMetricsController(IHddMetricsRepository repository, ILogger<HddMetricsController> logger, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
             _logger = logger;
             _logger.LogDebug(1, "NLog встроен в HddMetricsController");
         }
@@ -35,7 +38,7 @@ namespace MetricsAgent.Controllers
                 return NotFound();
             }
             _logger.LogInformation("Запрос выполнен успшно.");
-            return Ok(new HddMetricsByTimePeriodResponse() { Metrics = result.Select(val => val.Value).ToList() });
+            return Ok(new HddMetricsByTimePeriodResponse() { Metrics = result.Select(_mapper.Map<HddMetricsResponse>).ToList() });
         }
     }
 }

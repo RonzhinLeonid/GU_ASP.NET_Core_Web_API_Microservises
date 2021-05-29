@@ -7,6 +7,6 @@ namespace MetricsAgent.Responses
 {
     public class CpuMetricsByTimePeriodResponse
     {
-        public List<int> Metrics { get; set; }
+        public List<CpuMetricsResponse> Metrics { get; set; }
     }
 }

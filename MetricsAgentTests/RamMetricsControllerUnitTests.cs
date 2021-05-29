@@ -6,6 +6,7 @@ using Xunit;
 using Moq;
 using Microsoft.Extensions.Logging;
 using MetricsAgent.DAL;
+using AutoMapper;
 
 namespace MetricsAgentTests
 {
@@ -14,14 +15,14 @@ namespace MetricsAgentTests
         private RamMetricsController controller;
         private Mock<IRamMetricsRepository> mock;
         private Mock<ILogger<RamMetricsController>> mockLogger;
+        private IMapper mapper;
 
         public RamMetricsControllerUnitTests()
         {
             mock = new Mock<IRamMetricsRepository>();
             mockLogger = new Mock<ILogger<RamMetricsController>>();
-            controller = new RamMetricsController(mock.Object, mockLogger.Object);
+            controller = new RamMetricsController(mock.Object, mockLogger.Object, mapper);
         }
-
 
         [Fact]
         public void GetMetrics_ReturnsOk()

@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace MetricsAgent.Responses
 {
-    public class DotNetMetricsByTimePeriodResponse
+    public class DotNetMetricsResponse
     {
-        public List<DotNetMetricsResponse> Metrics { get; set; }
+        public DateTimeOffset Time { get; set; }
+        public int Value { get; set; }
     }
 }
