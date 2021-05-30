@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace MetricsManager.Responses
 {
-    public class DotnetGetMetricsFromAllClusterResponse
+    public class DotNetGetMetricsFromAllClusterResponse
     {
-        public IEnumerable<DotnetMetricResponse> Metrics { get; set; }
+        public IEnumerable<DotNetMetricResponse> Metrics { get; set; }
     }
 }

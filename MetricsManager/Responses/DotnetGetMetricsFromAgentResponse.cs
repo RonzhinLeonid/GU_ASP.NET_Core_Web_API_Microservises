@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace MetricsManager.Responses
 {
-    public class DotnetGetMetricsFromAgentResponse
+    public class DotNetGetMetricsFromAgentResponse
     {
-        public IEnumerable<DotnetMetricResponse> Metrics { get; set; }
+        public IEnumerable<DotNetMetricResponse> Metrics { get; set; }
     }
 }

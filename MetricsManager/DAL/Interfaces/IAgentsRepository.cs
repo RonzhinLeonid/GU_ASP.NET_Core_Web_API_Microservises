@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MetricsManager.DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MetricsManager.DAL.Interfaces
 {
-    interface IAgentsRepository
+    public interface IAgentsRepository
     {
         void Create(AgentInfo agent);
         IList<AgentInfo> Get();

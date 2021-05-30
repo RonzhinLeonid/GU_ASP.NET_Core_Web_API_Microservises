@@ -9,7 +9,6 @@ namespace MetricsManager.DAL.Models
     {
         public int Id { get; set; }
         public string Uri { get; set; }
-
         public bool IsEnabled { get; set; }
     }
 }

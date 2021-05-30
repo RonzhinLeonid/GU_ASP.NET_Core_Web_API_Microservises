@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MetricsManager.Responses
 {
-    public class DotnetMetricResponse
+    public class DotNetMetricResponse
     {
         public int Id { get; set; }
         public int AgentId { get; set; }
