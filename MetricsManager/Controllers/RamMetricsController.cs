@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Microsoft.Extensions.Logging;
+using MetricsManager.DAL.Interfaces;
+using AutoMapper;
 
 namespace MetricsManager.Controllers
 {
@@ -9,12 +11,16 @@ namespace MetricsManager.Controllers
     [ApiController]
     public class RamMetricsController : ControllerBase
     {
+        private readonly IRamMetricsRepository _repository;
         private readonly ILogger<RamMetricsController> _logger;
+        private readonly IMapper _mapper;
 
-        public RamMetricsController(ILogger<RamMetricsController> logger)
+        public RamMetricsController(IRamMetricsRepository repository, ILogger<RamMetricsController> logger, IMapper mapper)
         {
+            _repository = repository;
             _logger = logger;
             _logger.LogDebug(1, "NLog встроен в CpuMetricsController");
+            _mapper = mapper;
         }
 
         [HttpGet("available/agent/{agentId}")]

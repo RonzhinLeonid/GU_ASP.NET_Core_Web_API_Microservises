@@ -8,7 +8,7 @@ namespace MetricsManager.DAL.Models
     public class AgentInfo
     {
         public int Id { get; set; }
-        public string Uri { get; set; }
+        public string Url { get; set; }
         public bool IsEnabled { get; set; }
     }
 }

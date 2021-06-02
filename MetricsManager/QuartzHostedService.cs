@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using MetricsAgent.Jobs;
+﻿using MetricsManager.Jobs;
 using Microsoft.Extensions.Hosting;
 using Quartz;
 using Quartz.Spi;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace MetricsAgent
+namespace MetricsManager
 {
     public class QuartzHostedService : IHostedService
     {
@@ -17,9 +15,9 @@ namespace MetricsAgent
         private readonly IEnumerable<JobSchedule> _jobSchedules;
 
         public QuartzHostedService(
-            ISchedulerFactory schedulerFactory,
-            IJobFactory jobFactory,
-            IEnumerable<JobSchedule> jobSchedules)
+           ISchedulerFactory schedulerFactory,
+           IJobFactory jobFactory,
+           IEnumerable<JobSchedule> jobSchedules)
         {
             _schedulerFactory = schedulerFactory;
             _jobSchedules = jobSchedules;

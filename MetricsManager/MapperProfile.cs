@@ -15,7 +15,7 @@ namespace MetricsManager
         {
             var valueConverter = new DateTimeOffsetСonverter();
             CreateMap<AgentInfo, AgentsResponse>();
-            CreateMap<CpuMetric, CpuMetricResponse>()
+            CreateMap<RamMetric, CpuMetricResponse>()
             .ForMember(r => r.Time, exp => exp.ConvertUsing(valueConverter, val => val.Time));
             CreateMap<DotNetMetric, DotNetMetricResponse>()
             .ForMember(r => r.Time, exp => exp.ConvertUsing(valueConverter, val => val.Time));

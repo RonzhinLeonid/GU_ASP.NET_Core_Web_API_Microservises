@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MetricsManager.DAL.Interfaces
+namespace MetricsManager.Services.Response
 {
-    public interface IDotNetMetricsRepository : IRepository<DotNetMetric>
+    public class AllRamMetricsApiResponse
     {
+        public List<RamMetric> Metrics { get; set; }
     }
 }

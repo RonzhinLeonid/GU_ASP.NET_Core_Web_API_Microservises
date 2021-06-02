@@ -21,7 +21,7 @@ namespace MetricsManager.DAL.Repositories
         {
             using (var connection = new SQLiteConnection(SQLConnectionString.ConnectionString))
             {
-                var count = connection.ExecuteScalar<int>($"SELECT Count(*) FROM agents WHERE uri=@uri;", new { uri = agent.Uri });
+                var count = connection.ExecuteScalar<int>($"SELECT Count(*) FROM agents WHERE uri=@uri;", new { uri = agent.Url });
                 if (count > 0)
                 {
                     throw new ArgumentException("Агент уже существует");
@@ -30,7 +30,7 @@ namespace MetricsManager.DAL.Repositories
                 $"INSERT INTO agents (uri,isenabled) VALUES (@uri,@isenabled);",
                 new 
                 { 
-                    uri = agent.Uri, 
+                    uri = agent.Url, 
                     isenabled = agent.IsEnabled 
                 }
                 );
@@ -59,7 +59,7 @@ namespace MetricsManager.DAL.Repositories
         {
             using (var connection = new SQLiteConnection(SQLConnectionString.ConnectionString))
             {
-                var count = connection.ExecuteScalar<int>($"SELECT Count(*) FROM agents WHERE uri=@uri;", new { uri = agent.Uri });
+                var count = connection.ExecuteScalar<int>($"SELECT Count(*) FROM agents WHERE uri=@uri;", new { uri = agent.Url });
                 if (count <= 0)
                 {
                     throw new ArgumentException("Агент не существует");
@@ -67,7 +67,7 @@ namespace MetricsManager.DAL.Repositories
                 var result = connection.Execute($"UPDATE agents SET uri=@uri, isenabled=@isenabled where id=@id;",
                 new 
                 { 
-                    uri = agent.Uri, 
+                    uri = agent.Url, 
                     isenabled = agent.IsEnabled,
                     id = agent.Id
                 }
