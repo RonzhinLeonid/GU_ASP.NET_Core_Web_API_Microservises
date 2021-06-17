@@ -18,7 +18,7 @@ namespace MetricsManager.Controllers
         }
 
         [HttpGet("errors-count/agent/{agentId}/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetErrorsCountFromAgent([FromRoute] int agentId, [FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        public IActionResult GetErrorsCountFromAgent([FromRoute] int agentId, [FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
         {
             _logger.LogInformation("Получение количества ошибок за период: {fromTime}, {toTime} от {agentId}",
                 agentId,
@@ -27,7 +27,7 @@ namespace MetricsManager.Controllers
             return Ok();
         }
         [HttpGet("errors-count/cluster/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetErrorsCountFromAllCluster([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        public IActionResult GetErrorsCountFromAllCluster([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
         {
             _logger.LogInformation("Получение количества ошибок за период: {fromTime}, {toTime}",
                 fromTime.ToString(),
